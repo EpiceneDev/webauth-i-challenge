@@ -1,13 +1,12 @@
 const express = require('express');
-const helmet = require('helmet');
+
+const apiRouter = require('./api-router.js');
+const configureMiddleware = require('./configure-middleware.js');
 
 const server = express();
 
-server
-    .use(helmet())
-    .use(express.json());
+configureMiddleware(server);
 
-    server.get("/", (req, res) => {
-        res.send("Server is running....")
-    })   
+server.use('/api', apiRouter);
+
 module.exports = server;
