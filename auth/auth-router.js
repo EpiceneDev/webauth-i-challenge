@@ -12,6 +12,7 @@ router.post('/register', (req, res) => {
 
     Users.add(user)
         .then(saved => {
+            req.session.username = saved.username;
             res.status(201).json(saved);
         })
         .catch(err => {
@@ -27,6 +28,7 @@ router.post('/login', (req, res) => {
         .first()
         .then(user => {
             if (user && bcrypt.compareSync(password, user.password)) {
+                req.session.username = user.username;
                 res.status(200).json({ message: `Welcome ${user.username}!` });
             } else {
                 res.status(401).json({ message: 'Invalid credentials' });
@@ -38,5 +40,24 @@ router.post('/login', (req, res) => {
         });
         
 });
+
+router.get("/logout", (req, res) => {
+    if (req.session) {
+      req.session.destroy(error => {
+        if (error) {
+          res
+            .status(500)
+            .json({
+              message:
+                "Please contact admin. You are unable to logout."
+            });
+        } else {
+          res.status(200).json({ message: "logged out successfully" });
+        }
+      });
+    } else {
+      res.status(200).json({ message: "Good Bye" });
+    }
+  });
 
 module.exports = router;
