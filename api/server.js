@@ -19,7 +19,9 @@ const sessionConfig = {
         maxAge: 1000 * 60 * 60,
         secure: process.env.NODE_ENV === "development" ? false : true,
         httpOnly: true
-    }
+    },
+    resave: false,
+    saveUninitialized: true
 };
 
 server
@@ -32,5 +34,9 @@ server
 server
     .use('/api/auth', authRouter)
     .use('/api/users', usersRouter);
+
+server.get("/", (req, res) => {
+    res.json({ api: "up", session: req.session })
+})
 
 module.exports = server;
