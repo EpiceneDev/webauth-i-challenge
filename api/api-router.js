@@ -15,7 +15,7 @@ router.post('/hash', (req, res) => {
     // read a password from the body
     const password = req.body.password;
 
-    // hash the password using bcryptjs 8 - 
+    // hash the password using bcryptjs 8 - 14, maybe 15 or 16
     const hash = bcrypt.hashSync(password, 8);
 
     // return it to the user in an object that looks like
